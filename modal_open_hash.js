@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
       const hash = window.location.hash;
       if (hash === "#request-demo") {
         modal1.style.display = "flex";
-      } else if (hash === "#start-for-free") {
+      } else if (hash === "#start-for-free" || hash === "#get-started") {
         modal2.style.display = "flex";
       } else if (hash === "#contact-form") {
         modal3.style.display = "flex";
