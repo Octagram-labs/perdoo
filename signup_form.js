@@ -40,7 +40,7 @@ function handleSubmit(event) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     // Blacklisted email domains
-    const blacklistedEmails = "mozmail.com,engagedly.com,atlassian.com";
+    const blacklistedEmails = "mozmail.com,engagedly.com,atlassian.com,gmail.com";
     const enteredEmail = emailInput.value.trim();
     const enteredDomain = enteredEmail.split('@')[1];       
     console.log("Entered Email:", enteredEmail);
@@ -105,7 +105,6 @@ function handleSubmit(event) {
             // Change button text to "Please wait..."
             const submitSignupButton = document.getElementById('submitSignupButton'); 
             submitSignupButton.textContent = 'Please wait...';
-
             
             // Construct query parameters
             const queryParams = new URLSearchParams({
@@ -185,7 +184,7 @@ function handleSubmit(event) {
                 // Redirect to Calendly with email parameter
                 const calendlyUrl = `https://calendly.com/perdoo/onboarding/?email=${encodeURIComponent(email)}&a1=${encodeURIComponent(companySize)}`;
                 // Open Calendly URL in a new tab
-                window.open(calendlyURL, '_blank');
+                window.open(calendlyUrl, '_blank');
             }            
         }
     }
