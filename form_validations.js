@@ -269,4 +269,91 @@ $(document).ready(function() {
       }
     },
   });
+
+  $('#securityForm').validate({
+    rules: {
+      securityFirstName: {
+        required: true
+      },
+      securityLastName: {
+        required: true
+      },
+      securityWorkEmail: {
+        required: true,
+        email: true,
+        validDomain: true
+      },
+      securityCompanyName: {
+        required: true
+      },
+      securityEmployees: {
+        required: true
+      },
+      securityMessage: {
+        required: true
+      },
+      securityPrivacy: {
+        required: true
+      }
+    },
+    messages: {
+      securityFirstName: {
+        required: 'First name is required'
+      },
+      securityLastName: {
+        required: 'Last name is required'
+      },
+      securityWorkEmail: {
+        required: 'Email address is required',
+        email: 'Please enter a valid email address'
+      },
+      securityCompanyName: {
+        required: 'Company name is required'
+      },
+      securityEmployees: {
+        required: 'Number of employees is required'
+      },
+      securityMessage: {
+        required: 'Message is required'
+      },
+      securityPrivacy: {
+        required: 'Please agree to the privacy policy'
+      }
+    },
+    errorPlacement: function(error, element) {
+      if (element.attr('name') === 'securityPrivacy') {
+        error.insertAfter(element.closest('[data-name="securityFormCheckbox"]'));
+      } else if (element.attr('name') === 'securityMessage') {
+        error.insertAfter(element);
+      } else {
+        // Check if element has data-name="checkbox" attribute
+        const checkboxDiv = element.closest('[data-name="securityFormCheckbox"]');
+        if (checkboxDiv.length) {
+          error.insertAfter(checkboxDiv);
+        } else {
+          error.insertAfter(element);
+        }
+      }
+    },
+    highlight: function(element, errorClass, validClass) {
+      // Add error class to select element and set border color
+      $(element).addClass('error-border');
+
+      // Highlight checkbox if it has class 'error-checkbox'
+      const checkboxDiv = $(element).closest('[data-name="securityFormCheckbox"]');
+      if (checkboxDiv.length) {
+        checkboxDiv.addClass('error-checkbox');
+      }
+    },
+    unhighlight: function(element, errorClass, validClass) {
+      // Remove error class from select element
+      $(element).removeClass('error-border');
+
+      // Remove error class from checkbox
+      const checkboxDiv = $(element).closest('[data-name="securityFormCheckbox"]');
+      if (checkboxDiv.length) {
+        checkboxDiv.removeClass('error-checkbox');
+      }
+    },
+  });
 });
