@@ -184,7 +184,8 @@ function handleSubmit(event) {
                 //window.location.href = 'https://calendly.com/perdoo/perdoo-demo';
                 // Redirect to Calendly with email parameter
                 const calendlyUrl = `https://calendly.com/perdoo/onboarding/?email=${encodeURIComponent(email)}&a1=${encodeURIComponent(companySize)}`;
-                window.location.href = calendlyUrl;
+                // Open Calendly URL in a new tab
+                window.open(calendlyUrl, '_blank');
             }            
         }
     }
