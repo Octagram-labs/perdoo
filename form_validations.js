@@ -194,7 +194,6 @@ $(document).ready(function() {
       salesWorkEmail: {
         required: true,
         email: true,
-        validDomain: true
       },
       salesCompanyName: {
         required: true
