@@ -43,6 +43,8 @@ function handleSubmit(event) {
     const blacklistedEmails = "mozmail.com,engagedly.com,atlassian.com";
     const enteredEmail = emailInput.value.trim();
     const enteredDomain = enteredEmail.split('@')[1];       
+    console.log("Entered Email:", enteredEmail);
+    console.log("Entered Domain:", enteredDomain);
     
     // Add event listener to remove error message when input is focused
     emailInput.addEventListener('focus', function() {
@@ -100,6 +102,11 @@ function handleSubmit(event) {
     // If there are no validation errors, proceed with the fetch request
     if (!emailErrorMessage.style.display || emailErrorMessage.style.display === 'none') {
         if (!companySizeErrorMessage.style.display || companySizeErrorMessage.style.display === 'none') {
+            // Change button text to "Please wait..."
+            const submitSignupButton = document.getElementById('submitSignupButton'); 
+            submitSignupButton.textContent = 'Please wait...';
+
+            
             // Construct query parameters
             const queryParams = new URLSearchParams({
                 email: email,
@@ -167,13 +174,17 @@ function handleSubmit(event) {
                 })
                 .catch(error => {
                     console.error('Error:', error);
+                })
+                .finally(() => {
+                    // Reset button text
+                    submitSignupButton.textContent = 'Start for free'; 
                 });
             } else {
                 // Redirect user to Calendly link
                 //window.location.href = 'https://calendly.com/perdoo/perdoo-demo';
                 // Redirect to Calendly with email parameter
                 const calendlyUrl = `https://calendly.com/perdoo/onboarding/?email=${encodeURIComponent(email)}&a1=${encodeURIComponent(companySize)}`;
-                window.open(calendlyUrl, '_blank');
+                window.location.href = calendlyUrl;
             }            
         }
     }
