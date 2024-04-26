@@ -1,14 +1,16 @@
 $(document).ready(function() {
-  // Define an array of invalid domains
-  const invalidDomains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'competitor.com'];
-
-  // Add custom method to check for valid email domain
-  $.validator.addMethod('validDomain', function(value, element) {
-    const domainPart = value.split('@')[1];
-    return $.inArray(domainPart, invalidDomains) === -1;
-  }, 'Please enter a business email');
-
-  // Initialize form validation
+  fetch('https://raw.githubusercontent.com/Octagram-labs/perdoo/main/blacklist_emails.json')
+        .then(response => response.json())
+        .then(data => {
+            // Blacklisted email domains
+            const invalidDomains = data;
+            // Add custom method to check for valid email domain
+            $.validator.addMethod('validDomain', function(value, element) {
+              const domainPart = value.split('@')[1];
+              return $.inArray(domainPart, invalidDomains) === -1;
+            }, 'Please enter a business email');
+        
+            // Initialize form validation
   $('#ebooksForm').validate({
     rules: {
       ebookFirstName: {
@@ -355,4 +357,9 @@ $(document).ready(function() {
       }
     },
   });
+        
+        })
+        .catch(error => {
+            console.error('Error fetching blacklisted emails:', error);
+        });
 });
