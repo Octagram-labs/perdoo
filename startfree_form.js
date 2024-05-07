@@ -126,7 +126,7 @@ function handleSubmit(event) {
                                         showEmailError()
                                         break;
                                     case 'company_disabled':
-                                        signupMessageRed.textContent = "The account for ${email} has been disabled. Contact us at support@perdoo.com in case you need help.";
+                                        signupMessageRed.textContent = `The account for ${email} has been disabled. Contact us at support@perdoo.com in case you need help.`;
                                         signupMessageRed.style.display = 'block';
                                         break;
                                     case 'domain_claimed':
