@@ -136,6 +136,10 @@ function handleSubmit(event) {
                                     case 'email_signup_success':
                                         signupMessageGreen.textContent = "Please check your email to complete your registration!";
                                         signupMessageGreen.style.display = 'block';
+                                        //Get form and submit
+                                        const signupForm = document.getElementsById('signup-form');
+                                        signupForm.addEventListener("submit");
+                                        signupForm.submit();
                                         // Hide the form content
                                         const formContent = document.querySelector('[form-normal="signup-form"]');
                                         if (formContent) {
