@@ -136,7 +136,7 @@ function handleSubmit(event) {
                                     case 'email_signup_success':
                                         signupMessageGreen.textContent = "Please check your email to complete your registration!";
                                         signupMessageGreen.style.display = 'block';
-                                        document.getElementById("signupFormSubmit").click()​​​;​
+                                        document.getElementById("signupFormSubmit").click();
                                         // Hide the form content
                                         const formContent = document.querySelector('[form-normal="signup-form"]');
                                         if (formContent) {
@@ -147,6 +147,11 @@ function handleSubmit(event) {
                                         if (successMessage) {
                                             successMessage.style.display = 'block';
                                         }
+                                        // After successful fetch
+                                        dataLayer.push({
+                                            'event': 'formSubmit',
+                                            'formId': event.target.id,
+                                        });
                                         break;
                                     case 'user_exists':
                                         // Redirect user to the given URL
