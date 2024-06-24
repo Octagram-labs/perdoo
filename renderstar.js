@@ -9,22 +9,28 @@ document.addEventListener('DOMContentLoaded', function() {
         let pxWrapper = getCodeValue.querySelector("[px-star-wrapper]");
         let pxStarActive = getCodeValue.querySelector("[px-star='active']");
         let pxStarInActive = getCodeValue.querySelector("[px-star='inactive']");
+        let pxStarHalf = getCodeValue.querySelector("[px-star='half']");
 
-        // Retrieve the value from the input and round it
-        let valueStar = getCodeValue
-            .querySelector("[px-star-input]")
-            .getAttribute("px-star-input");
-        let roundedValue = Math.round(Number(valueStar));
+        // Retrieve the value from the input
+        let valueStar = getCodeValue.querySelector("[px-star-input]").getAttribute("px-star-input");
+        let numericValue = Number(valueStar);
+        let roundedValue = Math.floor(numericValue);
+        let hasHalfStar = (numericValue - roundedValue) >= 0.5;
 
         // Clear the pxWrapper before rendering new stars
         pxWrapper.innerHTML = "";
 
-        // Render active and inactive stars based on the rounded value
+        // Render active, half, and inactive stars based on the value
         for (let i = 1; i <= 5; i++) {
             if (i <= roundedValue) {
                 // Clone the active star and append to the wrapper
                 let cloneActive = pxStarActive.cloneNode(true);
                 pxWrapper.appendChild(cloneActive);
+            } else if (i === roundedValue + 1 && hasHalfStar) {
+                // Clone the half star and append to the wrapper
+                let cloneHalf = pxStarHalf.cloneNode(true);
+                pxWrapper.appendChild(cloneHalf);
+                hasHalfStar = false; // Ensure only one half star is added
             } else {
                 // Clone the inactive star and append to the wrapper
                 let cloneInactive = pxStarInActive.cloneNode(true);
