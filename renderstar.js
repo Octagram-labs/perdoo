@@ -1,5 +1,4 @@
 // Please follow div structure -- attributes 
-
 document.addEventListener('DOMContentLoaded', function() {
     // Select the main component wrapper
     let getCodeValue = document.querySelector("[px-star='component']");
@@ -14,8 +13,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Retrieve the value from the input
         let valueStar = getCodeValue.querySelector("[px-star-input]").getAttribute("px-star-input");
         let numericValue = Number(valueStar);
-        let roundedValue = Math.floor(numericValue);
-        let hasHalfStar = (numericValue - roundedValue) >= 0.5;
+        let roundedValue = Math.floor(numericValue); // Whole number part
+        let decimalPart = numericValue - roundedValue; // Decimal part
 
         // Clear the pxWrapper before rendering new stars
         pxWrapper.innerHTML = "";
@@ -26,11 +25,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Clone the active star and append to the wrapper
                 let cloneActive = pxStarActive.cloneNode(true);
                 pxWrapper.appendChild(cloneActive);
-            } else if (i === roundedValue + 1 && hasHalfStar) {
+            } else if (i === roundedValue + 1 && decimalPart >= 0.25 && decimalPart < 0.75) {
                 // Clone the half star and append to the wrapper
                 let cloneHalf = pxStarHalf.cloneNode(true);
                 pxWrapper.appendChild(cloneHalf);
-                hasHalfStar = false; // Ensure only one half star is added
             } else {
                 // Clone the inactive star and append to the wrapper
                 let cloneInactive = pxStarInActive.cloneNode(true);
