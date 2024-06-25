@@ -18,12 +18,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // Function to handle form submission
     function handleSubmit(event) {
         event.preventDefault();
-        
-        // Add 'disabled' class
-        submitSignupButton.classList.add('disabled');
-        submitSignupButton.setAttribute('data-disabled', 'true');
-        console.log('Button classes after adding disabled:', submitSignupButton.classList);
 
+        // Function to get cookie value by name
         function getCookie(name) {
             const value = `; ${document.cookie}`;
             const parts = value.split(`; ${name}=`);
@@ -68,36 +64,43 @@ document.addEventListener('DOMContentLoaded', (event) => {
             .then(data => {
                 const blacklistedEmails = data;
 
+                let valid = true;
+
                 if (!email) {
                     showEmailError();
+                    valid = false;
                 } else if (!emailRegex.test(email)) {
                     showEmailError();
+                    valid = false;
                 } else if (blacklistedEmails.includes(email.split('@')[1])) {
                     showEmailError();
+                    valid = false;
                 } else {
                     hideEmailError();
                 }
 
                 if (!companySize) {
                     showCompanyError();
+                    valid = false;
                 } else {
                     hideCompanyError();
                 }
 
-                if (!emailErrorMessage.style.display || emailErrorMessage.style.display === 'none') {
-                    if (!companySizeErrorMessage.style.display || companySizeErrorMessage.style.display === 'none') {
-                        submitSignupButton.textContent = 'Please wait...';
+                if (valid) {
+                    submitSignupButton.textContent = 'Please wait...';
+                    submitSignupButton.classList.add('disabled');
+                    submitSignupButton.setAttribute('data-disabled', 'true');
 
-                        const queryParams = new URLSearchParams({
-                            email: email,
-                            country: country,
-                            company_size: companySize
-                        });
+                    const queryParams = new URLSearchParams({
+                        email: email,
+                        country: country,
+                        company_size: companySize
+                    });
 
-                        function sendSignupRequest(){
-                            fetch(`${getBaseUrl()}/hp-signup?${queryParams.toString()}`, {
-                                method: 'POST'
-                            })
+                    function sendSignupRequest() {
+                        fetch(`${getBaseUrl()}/hp-signup?${queryParams.toString()}`, {
+                            method: 'POST'
+                        })
                             .then(response => response.json())
                             .then(data => {
                                 const signupMessageGreen = document.querySelector('[signupMessage="green"]');
@@ -153,17 +156,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
                                 submitSignupButton.classList.remove('disabled');
                                 submitSignupButton.removeAttribute('data-disabled');
                             });
-                        }
+                    }
 
-                        if (companySize === '1-10' || companySize === '11-50') {
-                            sendSignupRequest();
-                        } else if (companySize === '51-500' || companySize === '501-2500' || companySize === '2501+') {
-                            sendSignupRequest();
-                            setTimeout(() => {
-                                const calendlyUrl = `https://calendly.com/perdoo/onboarding/?email=${encodeURIComponent(email)}&a1=${encodeURIComponent(companySize)}`;
-                                window.open(calendlyUrl, '_blank');
-                            }, 3000);
-                        }
+                    if (companySize === '1-10' || companySize === '11-50') {
+                        sendSignupRequest();
+                    } else if (companySize === '51-500' || companySize === '501-2500' || companySize === '2501+') {
+                        sendSignupRequest();
+                        setTimeout(() => {
+                            const calendlyUrl = `https://calendly.com/perdoo/onboarding/?email=${encodeURIComponent(email)}&a1=${encodeURIComponent(companySize)}`;
+                            window.open(calendlyUrl, '_blank');
+                        }, 3000);
                     }
                 }
             })
@@ -172,9 +174,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
             });
     }
 
-    document.addEventListener('click', function(event) {
+    document.addEventListener('click', function (event) {
         const target = event.target;
-        if (target && target.matches('[data-name="signup-submit"]')) {
+        if (target && target.matches('[data-name="signup-submit"]') && !target.classList.contains('disabled')) {
             console.log('Click event on div with data-name="signup-submit"');
             handleSubmit(event);
         }
