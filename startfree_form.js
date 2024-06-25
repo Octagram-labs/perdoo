@@ -20,7 +20,10 @@ function handleSubmit(event) {
 
     // Disable the submit button to avoid multiple clicks
     const submitSignupButton = document.querySelector('[data-name="signup-submit"]');
+    console.log('submitSignupButton:', submitSignupButton); // Debugging line
+
     submitSignupButton.classList.add('disabled');
+    console.log('Disabled class added:', submitSignupButton.classList.contains('disabled')); // Debugging line
 
     // Function to get cookie value by name
     function getCookie(name) {
