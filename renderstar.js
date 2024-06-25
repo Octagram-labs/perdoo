@@ -1,41 +1,42 @@
-// Please follow div structure -- attributes 
-document.addEventListener('DOMContentLoaded', function() {
-    // Select the main component wrapper
-    let getCodeValue = document.querySelector("[px-star='component']");
+document.addEventListener('DOMContentLoaded', function () {
+  // Select the main component wrapper
+  let getCodeValue = document.querySelector("[px-star='component']");
 
-    if (getCodeValue !== null) {
-        // Select elements inside the component
-        let pxWrapper = getCodeValue.querySelector("[px-star-wrapper]");
-        let pxStarActive = getCodeValue.querySelector("[px-star='active']");
-        let pxStarInActive = getCodeValue.querySelector("[px-star='inactive']");
-        let pxStarHalf = getCodeValue.querySelector("[px-star='half']");
+  if (getCodeValue) {
+    // Select elements inside the component
+    let pxWrapper = getCodeValue.querySelector('[px-star-wrapper]');
+    let pxStarActive = getCodeValue.querySelector("[px-star='active']");
+    let pxStarInActive = getCodeValue.querySelector("[px-star='inactive']");
+    let pxStarHalf = getCodeValue.querySelector("[px-star='half']");
 
-        // Retrieve the value from the input
-        let valueStar = getCodeValue.querySelector("[px-star-input]").getAttribute("px-star-input");
-        let numericValue = Number(valueStar);
-        let roundedValue = Math.floor(numericValue); // Whole number part
-        let decimalPart = numericValue - roundedValue; // Decimal part
+    // Retrieve the rating value from the div with id 'ratings-average'
+    let averageRatingDiv = document.getElementById('ratings-average');
+    let valueStar = averageRatingDiv.textContent.trim();
+    let roundedValue = Math.floor(Number(valueStar)); // Get integer part
+    let decimalPart = Number(valueStar) - roundedValue; // Get decimal part
 
-        // Clear the pxWrapper before rendering new stars
-        pxWrapper.innerHTML = "";
+    // Clear the pxWrapper before rendering new stars
+    pxWrapper.innerHTML = '';
 
-        // Render active, half, and inactive stars based on the value
-        for (let i = 1; i <= 5; i++) {
-            if (i <= roundedValue) {
-                // Clone the active star and append to the wrapper
-                let cloneActive = pxStarActive.cloneNode(true);
-                pxWrapper.appendChild(cloneActive);
-            } else if (i === roundedValue + 1 && decimalPart >= 0.25 && decimalPart < 0.75) {
-                // Clone the half star and append to the wrapper
-                let cloneHalf = pxStarHalf.cloneNode(true);
-                pxWrapper.appendChild(cloneHalf);
-            } else {
-                // Clone the inactive star and append to the wrapper
-                let cloneInactive = pxStarInActive.cloneNode(true);
-                pxWrapper.appendChild(cloneInactive);
-            }
+    // Render full stars (active and half)
+    for (let i = 1; i <= 5; i++) {
+      if (i <= roundedValue) {
+        // Clone the active star and append to the wrapper
+        let cloneActive = pxStarActive.cloneNode(true);
+        pxWrapper.appendChild(cloneActive);
+      } else {
+        // Handle half star rendering
+        if (decimalPart > 0 && i === Math.ceil(roundedValue + 0.5)) {
+          let cloneHalf = pxStarHalf.cloneNode(true);
+          pxWrapper.appendChild(cloneHalf);
+        } else {
+          // Clone the inactive star and append to the wrapper
+          let cloneInactive = pxStarInActive.cloneNode(true);
+          pxWrapper.appendChild(cloneInactive);
         }
-    } else {
-        // The error handling case could also be extended here
+      }
     }
+  } else {
+    console.error('Component not found');
+  }
 });
