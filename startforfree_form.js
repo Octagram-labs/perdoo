@@ -7,6 +7,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     console.log('Submit button found:', submitSignupButton);
 
+    submitSignupButton.addEventListener('click', (event) => {
+        if (!submitSignupButton.classList.contains('disabled')) {
+            console.log('Submit button clicked');
+            handleSubmit(event);
+        }
+    });
+
     // Function to get base URL based on environment
     function getBaseUrl() {
         if (window.location.hostname.includes('staging')) {
@@ -19,6 +26,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // Function to handle form submission
     function handleSubmit(event) {
         event.preventDefault();
+        console.log('Handling form submission');
 
         // Function to get cookie value by name
         function getCookie(name) {
@@ -61,9 +69,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         fetch('https://raw.githubusercontent.com/Octagram-labs/perdoo/main/blacklist_emails.json')
-            .then(response => response.json())
+            .then(response => {
+                console.log('Fetched blacklist emails');
+                return response.json();
+            })
             .then(data => {
                 const blacklistedEmails = data;
+                console.log('Blacklist emails:', blacklistedEmails);
 
                 let valid = true;
 
@@ -88,6 +100,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 }
 
                 if (valid) {
+                    console.log('Form is valid, proceeding with submission');
                     submitSignupButton.textContent = 'Please wait...';
                     submitSignupButton.classList.add('disabled');
                     submitSignupButton.setAttribute('data-disabled', 'true');
@@ -99,11 +112,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     });
 
                     function sendSignupRequest() {
+                        console.log('Sending signup request');
                         fetch(`${getBaseUrl()}/hp-signup?${queryParams.toString()}`, {
                             method: 'POST'
                         })
                             .then(response => response.json())
                             .then(data => {
+                                console.log('Signup request response:', data);
                                 const signupMessageGreen = document.querySelector('[signupMessage="green"]');
                                 const signupMessageRed = document.querySelector('[signupMessage="red"]');
 
@@ -168,6 +183,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
                             window.open(calendlyUrl, '_blank');
                         }, 3000);
                     }
+                } else {
+                    console.log('Form validation failed');
                 }
             })
             .catch(error => {
