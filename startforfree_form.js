@@ -2,15 +2,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const submitSignupButton = document.querySelector('[data-name="signup-submit"]');
     if (!submitSignupButton) {
         console.error('Submit button not found');
-    } else {
-        console.log('Submit button found:', submitSignupButton);
-
-        submitSignupButton.addEventListener('click', (event) => {
-            if (!submitSignupButton.classList.contains('disabled')) {
-                handleSubmit(event);
-            }
-        });
+        return;
     }
+
+    console.log('Submit button found:', submitSignupButton);
 
     // Function to get base URL based on environment
     function getBaseUrl() {
