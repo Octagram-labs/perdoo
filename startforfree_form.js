@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', (event) => {
-    const submitSignupButton = document.querySelector('[data-name="signup-submit"]');
+    const submitSignupButton = document.getElementById('submitSignupButton');
     if (!submitSignupButton) {
         console.error('Submit button not found');
         return;
@@ -35,17 +35,23 @@ document.addEventListener('DOMContentLoaded', (event) => {
             if (parts.length === 2) return parts.pop().split(';').shift();
         }
 
-        const emailInput = document.querySelector('input[name="signupemail"]');
+        const emailInput = document.getElementById('signupemail');
+        const companySizeSelect = document.getElementById('signupcompanysize-5');
+
+        if (!emailInput || !companySizeSelect) {
+            console.error('Form inputs not found');
+            return;
+        }
+
         const email = emailInput.value.trim();
         const country = getCookie("country");
-        const companySizeSelect = document.querySelector('select[name="signupcompanysize"]');
         const companySize = companySizeSelect.value.trim();
 
-        const emailErrorMessage = document.querySelector('[errorMessage="email"]');
-        const companySizeErrorMessage = document.querySelector('[errorMessage="companysize"]');
+        const emailErrorMessage = document.querySelector('[errormessage="email"]');
+        const companySizeErrorMessage = document.querySelector('[errormessage="companysize"]');
 
-        function showEmailError() {
-            emailErrorMessage.textContent = "Please enter a valid work email";
+        function showEmailError(message) {
+            emailErrorMessage.textContent = message;
             emailErrorMessage.style.display = 'block';
             emailInput.style.borderColor = "#FF5A5C";
         }
@@ -55,8 +61,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
             emailInput.style.borderColor = "";
         }
 
-        function showCompanyError() {
-            companySizeErrorMessage.textContent = "Please select a company size.";
+        function showCompanyError(message) {
+            companySizeErrorMessage.textContent = message;
             companySizeErrorMessage.style.display = 'block';
             companySizeSelect.style.borderColor = "#FF5A5C";
         }
@@ -80,20 +86,20 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 let valid = true;
 
                 if (!email) {
-                    showEmailError();
+                    showEmailError("Please enter a valid work email");
                     valid = false;
                 } else if (!emailRegex.test(email)) {
-                    showEmailError();
+                    showEmailError("Please enter a valid work email");
                     valid = false;
                 } else if (blacklistedEmails.includes(email.split('@')[1])) {
-                    showEmailError();
+                    showEmailError("Please enter a valid work email");
                     valid = false;
                 } else {
                     hideEmailError();
                 }
 
                 if (!companySize) {
-                    showCompanyError();
+                    showCompanyError("Please select a company size.");
                     valid = false;
                 } else {
                     hideCompanyError();
@@ -119,17 +125,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
                             .then(response => response.json())
                             .then(data => {
                                 console.log('Signup request response:', data);
-                                const signupMessageGreen = document.querySelector('[signupMessage="green"]');
-                                const signupMessageRed = document.querySelector('[signupMessage="red"]');
+                                const signupMessageGreen = document.querySelector('[signupmessage="green"]');
+                                const signupMessageRed = document.querySelector('[signupmessage="red"]');
 
                                 if (data.data && data.data.msg) {
                                     const errorMsg = data.data.msg.toLowerCase();
                                     switch (errorMsg) {
                                         case 'no_business_domain':
-                                            showEmailError();
+                                            showEmailError("Please enter a valid work email");
                                             break;
                                         case 'invalid_email_address':
-                                            showEmailError();
+                                            showEmailError("Please enter a valid work email");
                                             break;
                                         case 'company_disabled':
                                             signupMessageRed.textContent = `The account for ${email} has been disabled. Contact us at support@perdoo.com in case you need help.`;
