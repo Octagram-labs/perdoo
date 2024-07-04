@@ -1,18 +1,10 @@
 document.addEventListener('DOMContentLoaded', (event) => {
-    const submitSignupButton = document.getElementById('submitSignupButton');
+    const submitSignupButton = document.querySelector('[data-name="signup-submit"]');
     if (!submitSignupButton) {
         console.error('Submit button not found');
-        return;
+    } else {
+        console.log('Submit button found:', submitSignupButton);
     }
-
-    console.log('Submit button found:', submitSignupButton);
-
-    submitSignupButton.addEventListener('click', (event) => {
-        if (!submitSignupButton.classList.contains('disabled')) {
-            console.log('Submit button clicked');
-            handleSubmit(event);
-        }
-    });
 
     // Function to get base URL based on environment
     function getBaseUrl() {
@@ -26,7 +18,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // Function to handle form submission
     function handleSubmit(event) {
         event.preventDefault();
-        console.log('Handling form submission');
 
         // Function to get cookie value by name
         function getCookie(name) {
@@ -35,23 +26,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
             if (parts.length === 2) return parts.pop().split(';').shift();
         }
 
-        const emailInput = document.getElementById('signupemail');
-        const companySizeSelect = document.getElementById('signupcompanysize-5');
-
-        if (!emailInput || !companySizeSelect) {
-            console.error('Form inputs not found');
-            return;
-        }
-
+        const emailInput = document.querySelector('input[name="signupemail"]');
         const email = emailInput.value.trim();
         const country = getCookie("country");
+        const companySizeSelect = document.querySelector('select[name="signupcompanysize"]');
         const companySize = companySizeSelect.value.trim();
 
-        const emailErrorMessage = document.querySelector('[errormessage="email"]');
-        const companySizeErrorMessage = document.querySelector('[errormessage="companysize"]');
+        const emailErrorMessage = document.querySelector('[errorMessage="email"]');
+        const companySizeErrorMessage = document.querySelector('[errorMessage="companysize"]');
 
-        function showEmailError(message) {
-            emailErrorMessage.textContent = message;
+        function showEmailError() {
+            emailErrorMessage.textContent = "Please enter a valid work email";
             emailErrorMessage.style.display = 'block';
             emailInput.style.borderColor = "#FF5A5C";
         }
@@ -61,8 +46,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
             emailInput.style.borderColor = "";
         }
 
-        function showCompanyError(message) {
-            companySizeErrorMessage.textContent = message;
+        function showCompanyError() {
+            companySizeErrorMessage.textContent = "Please select a company size.";
             companySizeErrorMessage.style.display = 'block';
             companySizeSelect.style.borderColor = "#FF5A5C";
         }
@@ -75,38 +60,33 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         fetch('https://raw.githubusercontent.com/Octagram-labs/perdoo/main/blacklist_emails.json')
-            .then(response => {
-                console.log('Fetched blacklist emails');
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
                 const blacklistedEmails = data;
-                console.log('Blacklist emails:', blacklistedEmails);
 
                 let valid = true;
 
                 if (!email) {
-                    showEmailError("Please enter a valid work email");
+                    showEmailError();
                     valid = false;
                 } else if (!emailRegex.test(email)) {
-                    showEmailError("Please enter a valid work email");
+                    showEmailError();
                     valid = false;
                 } else if (blacklistedEmails.includes(email.split('@')[1])) {
-                    showEmailError("Please enter a valid work email");
+                    showEmailError();
                     valid = false;
                 } else {
                     hideEmailError();
                 }
 
                 if (!companySize) {
-                    showCompanyError("Please select a company size.");
+                    showCompanyError();
                     valid = false;
                 } else {
                     hideCompanyError();
                 }
 
                 if (valid) {
-                    console.log('Form is valid, proceeding with submission');
                     submitSignupButton.textContent = 'Please wait...';
                     submitSignupButton.classList.add('disabled');
                     submitSignupButton.setAttribute('data-disabled', 'true');
@@ -118,24 +98,22 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     });
 
                     function sendSignupRequest() {
-                        console.log('Sending signup request');
                         fetch(`${getBaseUrl()}/hp-signup?${queryParams.toString()}`, {
                             method: 'POST'
                         })
                             .then(response => response.json())
                             .then(data => {
-                                console.log('Signup request response:', data);
-                                const signupMessageGreen = document.querySelector('[signupmessage="green"]');
-                                const signupMessageRed = document.querySelector('[signupmessage="red"]');
+                                const signupMessageGreen = document.querySelector('[signupMessage="green"]');
+                                const signupMessageRed = document.querySelector('[signupMessage="red"]');
 
                                 if (data.data && data.data.msg) {
                                     const errorMsg = data.data.msg.toLowerCase();
                                     switch (errorMsg) {
                                         case 'no_business_domain':
-                                            showEmailError("Please enter a valid work email");
+                                            showEmailError();
                                             break;
                                         case 'invalid_email_address':
-                                            showEmailError("Please enter a valid work email");
+                                            showEmailError();
                                             break;
                                         case 'company_disabled':
                                             signupMessageRed.textContent = `The account for ${email} has been disabled. Contact us at support@perdoo.com in case you need help.`;
@@ -189,12 +167,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
                             window.open(calendlyUrl, '_blank');
                         }, 3000);
                     }
-                } else {
-                    console.log('Form validation failed');
                 }
             })
             .catch(error => {
                 console.error('Error fetching blacklist:', error);
             });
     }
+
+    submitSignupButton.addEventListener('click', function (event) {
+        if (!submitSignupButton.classList.contains('disabled')) {
+            console.log('Click event on div with data-name="signup-submit"');
+            handleSubmit(event);
+        }
+    });
 });
