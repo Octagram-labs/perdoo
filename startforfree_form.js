@@ -2,9 +2,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const submitSignupButton = document.querySelector('[data-name="signup-submit"]');
     if (!submitSignupButton) {
         console.error('Submit button not found');
-    } else {
-        console.log('Submit button found:', submitSignupButton);
+        return;
     }
+
+    let isSubmitting = false; // Flag to prevent multiple submissions
+
+    console.log('Submit button found:', submitSignupButton);
 
     // Function to get base URL based on environment
     function getBaseUrl() {
@@ -15,7 +18,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
     function handleSubmit(event) {
         event.preventDefault();
 
-        // Function to get cookie value by name
+        if (isSubmitting) return; // Prevent multiple submissions
+        isSubmitting = true;
+
         function getCookie(name) {
             const value = `; ${document.cookie}`;
             const parts = value.split(`; ${name}=`);
@@ -151,6 +156,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                                 submitSignupButton.textContent = 'Start for free';
                                 submitSignupButton.classList.remove('disabled');
                                 submitSignupButton.removeAttribute('data-disabled');
+                                isSubmitting = false; // Reset the flag after request completion
                             });
                     }
 
@@ -163,26 +169,18 @@ document.addEventListener('DOMContentLoaded', (event) => {
                             window.open(calendlyUrl, '_blank');
                         }, 3000);
                     }
+                } else {
+                    isSubmitting = false; // Reset the flag if form is invalid
                 }
             })
             .catch(error => {
                 console.error('Error fetching blacklist:', error);
+                isSubmitting = false; // Reset the flag if there is an error
             });
     }
 
-    // Function to remove all event listeners
-    function removeEventListeners(element, eventType) {
-        const clone = element.cloneNode(true);
-        element.replaceWith(clone);
-        return clone;
-    }
-
-    // Remove existing click event listeners
-    const cleanedSubmitSignupButton = removeEventListeners(submitSignupButton, 'click');
-
-    // Attach new click event listener
-    cleanedSubmitSignupButton.addEventListener('click', function (event) {
-        if (!cleanedSubmitSignupButton.classList.contains('disabled')) {
+    submitSignupButton.addEventListener('click', function (event) {
+        if (!submitSignupButton.classList.contains('disabled')) {
             console.log('Click event on div with data-name="signup-submit"');
             handleSubmit(event);
         }
