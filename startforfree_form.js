@@ -8,11 +8,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // Function to get base URL based on environment
     function getBaseUrl() {
-        if (window.location.hostname.includes('staging')) {
-            return 'https://eu.perdoo.com'; // Changed for testing
-        } else {
-            return 'https://eu.perdoo.com';
-        }
+        return window.location.hostname.includes('staging') ? 'https://eu.perdoo.com' : 'https://eu.perdoo.com';
     }
 
     // Function to handle form submission
@@ -174,8 +170,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
             });
     }
 
-    submitSignupButton.addEventListener('click', function (event) {
-        if (!submitSignupButton.classList.contains('disabled')) {
+    // Function to remove all event listeners
+    function removeEventListeners(element, eventType) {
+        const clone = element.cloneNode(true);
+        element.replaceWith(clone);
+        return clone;
+    }
+
+    // Remove existing click event listeners
+    const cleanedSubmitSignupButton = removeEventListeners(submitSignupButton, 'click');
+
+    // Attach new click event listener
+    cleanedSubmitSignupButton.addEventListener('click', function (event) {
+        if (!cleanedSubmitSignupButton.classList.contains('disabled')) {
             console.log('Click event on div with data-name="signup-submit"');
             handleSubmit(event);
         }
