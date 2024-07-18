@@ -28,7 +28,10 @@ document.addEventListener('DOMContentLoaded', function () {
   // Function to handle redirection after form submission
   function observeFormSubmission(formId) {
     const form = document.getElementById(formId);
+    if (!form) return;
+
     const doneMessage = form.querySelector('.w-form-done');
+    if (!doneMessage) return;
 
     // Observer to watch for changes in the display style of the done message
     const observer = new MutationObserver((mutations) => {
