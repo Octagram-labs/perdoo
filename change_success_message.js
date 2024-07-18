@@ -58,6 +58,18 @@ document.addEventListener('DOMContentLoaded', function () {
               firstName,
             )}&last_name=${encodeURIComponent(lastName)}`;
 
+            // Append URL to links with specific attributes
+            const salesEmployeesLink = document.querySelector('[calendly-link="salesEmployees"]');
+            const signupCompanySizeLink = document.querySelector('[calendly-link="signupcompanysize"]');
+
+            if (salesEmployeesLink) {
+              salesEmployeesLink.href = calendlyUrl;
+            }
+            if (signupCompanySizeLink) {
+              signupCompanySizeLink.href = calendlyUrl;
+            }
+
+            // Open the URL in a new tab
             window.open(calendlyUrl, '_blank');
           }, 2000);
         }
