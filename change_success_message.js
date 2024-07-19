@@ -1,4 +1,37 @@
 document.addEventListener('DOMContentLoaded', function () {
+  // Function to append the Calendly URL to the links
+  function appendCalendlyUrl() {
+    const firstName = document.querySelector('[name="demoFirstName"]').value;
+    const lastName = document.querySelector('[name="demoLastName"]').value;
+    const email = document.querySelector('[name="demoWorkEmail"]').value;
+    const demoEmployees = document.querySelector('[name="demoEmployees"]').value;
+    const calendlyUrl = `https://calendly.com/perdoo/onboarding/?email=${encodeURIComponent(
+      email,
+    )}&a1=${encodeURIComponent(
+      demoEmployees,
+    )}&first_name=${encodeURIComponent(
+      firstName,
+    )}&last_name=${encodeURIComponent(lastName)}`;
+
+    // Append URL to links with specific attributes
+    const salesEmployeesLink = document.querySelector('[calendly-link="salesEmployees"]');
+    const signupCompanySizeLink = document.querySelector('[calendly-link="signupcompanysize"]');
+
+    if (salesEmployeesLink) {
+      salesEmployeesLink.href = calendlyUrl;
+      console.log(`Appended URL to salesEmployeesLink: ${calendlyUrl}`);
+    } else {
+      console.error('SalesEmployees link not found.');
+    }
+
+    if (signupCompanySizeLink) {
+      signupCompanySizeLink.href = calendlyUrl;
+      console.log(`Appended URL to signupCompanySizeLink: ${calendlyUrl}`);
+    } else {
+      console.error('SignupCompanySize link not found.');
+    }
+  }
+
   // Function to toggle the display of message divs based on the selected value
   function toggleMessage(selectInputName) {
     const selectInput = document.querySelector(`[name='${selectInputName}']`);
@@ -25,80 +58,20 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // Function to handle redirection after form submission
-  function observeFormSubmission(formId) {
-    const form = document.getElementById(formId);
-    if (!form) return;
-
-    const doneMessage = form.querySelector('.w-form-done');
-    if (!doneMessage) return;
-
-    // Observer to watch for changes in the display style of the done message
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (
-          mutation.attributeName === 'style' &&
-          doneMessage.style.display === 'block'
-        ) {
-          setTimeout(() => {
-            const firstName = document.querySelector(
-              '[name="demoFirstName"]',
-            ).value;
-            const lastName = document.querySelector(
-              '[name="demoLastName"]',
-            ).value;
-            const email = document.querySelector(
-              '[name="demoWorkEmail"]',
-            ).value;
-            const demoEmployees = document.querySelector(
-              '[name="demoEmployees"]',
-            ).value;
-            const calendlyUrl = `https://calendly.com/perdoo/onboarding/?email=${encodeURIComponent(
-              email,
-            )}&a1=${encodeURIComponent(
-              demoEmployees,
-            )}&first_name=${encodeURIComponent(
-              firstName,
-            )}&last_name=${encodeURIComponent(lastName)}`;
-
-            // Append URL to links with specific attributes
-            const salesEmployeesLink = document.querySelector('[calendly-link="salesEmployees"]');
-            const signupCompanySizeLink = document.querySelector('[calendly-link="signupcompanysize"]');
-
-            if (salesEmployeesLink) {
-              salesEmployeesLink.href = calendlyUrl;
-            }
-            if (signupCompanySizeLink) {
-              signupCompanySizeLink.href = calendlyUrl;
-            }
-
-            // Open the URL in a new tab
-            window.open(calendlyUrl, '_blank');
-          }, 2000);
-        }
-      });
-    });
-
-    observer.observe(doneMessage, {
-      attributes: true,
-      attributeFilter: ['style'],
-    });
-  }
-
-  // Add event listeners to select inputs
-  const selectInputs = document.querySelectorAll('select');
-  selectInputs.forEach((selectInput) => {
-    selectInput.addEventListener('change', function () {
+  // Add event listeners to all form inputs
+  const formInputs = document.querySelectorAll('#requestDemoForm input, #requestDemoForm select, #signup-form input, #signup-form select');
+  formInputs.forEach((input) => {
+    input.addEventListener('change', function () {
+      appendCalendlyUrl();
       toggleMessage(this.name);
     });
   });
 
   // Initial toggle to set the correct display on page load
-  selectInputs.forEach((selectInput) => {
-    toggleMessage(selectInput.name);
+  formInputs.forEach((input) => {
+    toggleMessage(input.name);
   });
 
-  // Observe form submission for demo and sales forms
-  observeFormSubmission('requestDemoForm');
-  observeFormSubmission('signup-form');
+  // Append URL on page load for the first time
+  appendCalendlyUrl();
 });
