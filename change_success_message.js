@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
   // Function to append the Calendly URL to the links
   function appendCalendlyUrl() {
-    const firstName = document.querySelector('[name="demoFirstName"]').value;
-    const lastName = document.querySelector('[name="demoLastName"]').value;
-    const email = document.querySelector('[name="demoWorkEmail"]').value;
-    const demoEmployees = document.querySelector('[name="demoEmployees"]').value;
+    const firstName = document.querySelector('[name="demoFirstName"]')?.value || '';
+    const lastName = document.querySelector('[name="demoLastName"]')?.value || '';
+    const email = document.querySelector('[name="demoWorkEmail"]')?.value || '';
+    const demoEmployees = document.querySelector('[name="demoEmployees"]')?.value || '';
     const calendlyUrl = `https://calendly.com/perdoo/onboarding/?email=${encodeURIComponent(
       email,
     )}&a1=${encodeURIComponent(
