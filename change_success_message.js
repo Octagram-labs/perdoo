@@ -7,12 +7,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Function to construct the Calendly URL
   const constructCalendlyUrl = () => {
-    const firstName = getInputValueByName('demoFirstName');
-    const lastName = getInputValueByName('demoLastName');
-    const email = getInputValueByName('demoWorkEmail');
-    const demoEmployees = getInputValueByName('demoEmployees');
+    const email = getInputValueByName('signupemail');
+    const companySize = getInputValueByName('signupcompanysize');
 
-    return `https://calendly.com/perdoo/onboarding/?email=${encodeURIComponent(email)}&a1=${encodeURIComponent(demoEmployees)}&first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}`;
+    return `https://calendly.com/perdoo/onboarding/?email=${encodeURIComponent(email)}&a1=${encodeURIComponent(companySize)}`;
   };
 
   // Function to update the href of the links
@@ -49,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
   // Adding event listeners to all relevant form inputs
-  const formInputs = document.querySelectorAll('#requestDemoForm input, #requestDemoForm select, #signup-form input, #signup-form select');
+  const formInputs = document.querySelectorAll('#signup-form input, #signup-form select, #requestDemoForm input, #requestDemoForm select');
   formInputs.forEach(input => {
     input.addEventListener('change', handleInputChange);
   });
