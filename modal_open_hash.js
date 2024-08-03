@@ -51,6 +51,11 @@ document.addEventListener('DOMContentLoaded', function () {
     removeHashFromURL();
   });
 
+  close6.addEventListener('click', function () {
+    modal6.style.display = 'none';
+    removeHashFromURL();
+  });
+
   // Initial check when DOM is loaded
   openModalBasedOnURL();
 });
