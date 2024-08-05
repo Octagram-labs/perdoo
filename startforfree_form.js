@@ -164,10 +164,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
                         sendSignupRequest();
                     } else if (companySize === '51-500' || companySize === '501-2500' || companySize === '2501+') {
                         sendSignupRequest();
-                        setTimeout(() => {
+                        //Now not redirecting to calendly
+                        /* setTimeout(() => {
                             const calendlyUrl = `https://calendly.com/perdoo/onboarding/?email=${encodeURIComponent(email)}&a1=${encodeURIComponent(companySize)}`;
                             window.open(calendlyUrl, '_blank');
-                        }, 3000);
+                        }, 3000); */
                     }
                 } else {
                     isSubmitting = false; // Reset the flag if form is invalid
